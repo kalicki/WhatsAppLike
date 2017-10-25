@@ -1,6 +1,6 @@
 {
   "name": "rapido",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "scripts": {
     "dev": "next",
     "build": "next build",
@@ -15,8 +15,5 @@
     "rapid-io": "^0.4.2",
     "react": "^16.0.0",
     "react-dom": "^16.0.0"
-  },
-  "devDependencies": {
-    "redux-devtools-extension": "^2.13.2"
   }
 }
