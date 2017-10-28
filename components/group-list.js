@@ -1,12 +1,11 @@
 import React from 'react'
-
 import Group from './group'
 
 const GroupList = ({ groups, activeGroup, onClick }) =>
   <div>
     <h2>Groups</h2>
     <ul>
-      {groups.map(Group =>
+      {groups.map(group =>
         <Group
           key={group.id}
           onClick={() => onClick(group.id)}

@@ -5,14 +5,14 @@ import Header from '../components/header'
 import Loader from '../components/loader'
 
 import Input from '../components/input'
-import groupList from '../components/group-list'
+import GroupList from '../components/group-list'
 import MessageList from '../components/message-list'
 import Addgroup from '../components/add-group'
 
-import subscribegroups from '../lib/subscribe-groups'
+import subscribeGroups from '../lib/subscribe-groups'
 import subscribeMessages from '../lib/subscribe-messages'
 import sendMessage from '../lib/send-message'
-import creategroup from '../lib/create-group'
+import createGroup from '../lib/create-group'
 
 export default class Index extends Component {
   constructor(props) {
@@ -28,13 +28,13 @@ export default class Index extends Component {
   }
 
   componentDidMount() {
-    const { group } = this.state
-    this.groups = subscribegroups(
+    const { groups } = this.state
+    this.groups = subscribeGroups(
       groups => this.setState({ groups }),
       err => console.error('groups subscribe error', err)
     )
     this.messages = subscribeMessages(
-      group,
+      groups,
       messages => this.setState({ messages, loading: false }),
       err => console.error(err)
     )
@@ -74,7 +74,7 @@ export default class Index extends Component {
     }
   }
 
-  creategroup = (name, cb) => {
+  createGroup = (name, cb) => {
     const regex = /^[0-9a-zA-Z_-]+$/
 
     if (!regex.test(name) || name.length < 3) {
@@ -82,7 +82,7 @@ export default class Index extends Component {
       return
     }
 
-    creategroup(name, () => {
+    createGroup(name, () => {
       cb()
       this.handlegroupClick(name)
     })
@@ -111,6 +111,9 @@ export default class Index extends Component {
       loading,
       isMenuOpen,
     } = this.state
+
+    console.log(group)
+
     return (
       <Page
         heading={`# ${group}`}
@@ -119,20 +122,21 @@ export default class Index extends Component {
       >
         <div>
           <aside className={`${isMenuOpen && 'open'}`}>
-            <groupList
+            <GroupList
               groups={groups}
               activegroup={group}
               onClick={this.handlegroupClick}
             />
-            <Addgroup onSubmit={this.creategroup} />
+            <Addgroup onSubmit={this.createGroup} />
           </aside>
           <main>
             <MessageList messages={messages} loading={loading} />
             <Input
-              placeholder="Type a message..."
+              placeholder="Digite a mensagem..."
               onChange={this.handleInputChange}
               onSubmit={this.handleSubmit}
               value={text}
+              buttonSubmit="Enviar"
             />
           </main>
         </div>
