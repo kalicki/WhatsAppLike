@@ -3,7 +3,7 @@ import React, { Component } from 'react'
 import Loader from './loader'
 import Message from './message'
 
-export default class MessageList extends Component {
+export default class ListMessage extends Component {
   componentDidUpdate() {
     if (this.view) {
       this.view.scrollTop = this.view.scrollHeight

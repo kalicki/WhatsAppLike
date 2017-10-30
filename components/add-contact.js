@@ -1,57 +1,24 @@
 import React, { Component } from 'react'
 
 class AddGroup extends Component {
-  state = {
-    isExpanded: false,
-    value: '',
-  }
-
-  toggleExpand = () => this.setState({ isExpanded: !this.state.isExpanded })
-
-  onInputChange = event => {
-    this.setState({ value: event.target.value })
-  }
-
-  handleSubmit = event => {
-    event.preventDefault()
-    const { value } = this.state
-
-    this.props.onSubmit(value, () => {
-      this.setState({
-        value: '',
-        isExpanded: false,
-      })
-    })
-  }
-
   render() {
-    const { isExpanded, value } = this.state
 
     return (
-      <div className="action-new-group">
-        <button className="toggler" onClick={this.toggleExpand}>
-          <span className={`symbol ${isExpanded && 'active'}`}>+</span> New Group
+      <div className="action-new-contact">
+        <button className="toggler">
+          <span className="">+</span> New Contact
         </button>
-        {isExpanded &&
-          <form onSubmit={this.handleSubmit}>
-            <input
-              placeholder="Type a group name..."
-              name="name"
-              value={value}
-              onChange={this.onInputChange}
-            />
-            <button className="submit">Save</button>
-          </form>}
+
         <style jsx>
           {`
-            .action-new-group {
+            .action-new-contact {
               margin: 0;
               padding: 10px 0 10px;
               display: inline-block;
               width: 50%;
               position: absolute;
               bottom: 15px;
-              left: 0;
+              right: 0;
             }
 
             .toggler {
@@ -62,6 +29,7 @@ class AddGroup extends Component {
               text-align: center;
               font-size: 1.6rem;
               font-weight: 400;
+              text-align: left;
               color: #444;
               outline: none;
               cursor: pointer;

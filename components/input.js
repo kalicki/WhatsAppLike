@@ -24,7 +24,7 @@ const Input = ({ placeholder, value, onChange, onSubmit, name, margin = 0, butto
           border-radius: 0;
           -webkit-appearance: none;
         }
-        input {
+        input[type="text"] {
           font-family: 'Poppins', sans-serif;
           font-size: 1.8rem;
           border: 1px solid #EEEBF3;

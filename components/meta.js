@@ -7,7 +7,7 @@ const desc =
   export default () => (
   <div>
     <Head>
-      <title>Chat Demo App</title>
+      <title>WhatsAppLike</title>
       <meta name="description" content={desc} />
       <meta name="viewport" content="width=device-width, initial-scale=1" />
       <meta charSet="utf-8" />
@@ -41,10 +41,6 @@ const desc =
       <meta property="og:image" content="/static/banner.png" />
       <meta property="og:description" content={desc} />
       <meta property="og:type" content="website" />
-      <link
-        href="https://fonts.googleapis.com/css?family=Poppins:400,600"
-        rel="stylesheet"
-      />
     </Head>
     <style jsx global>{`
       html {
@@ -58,7 +54,7 @@ const desc =
         height: 100%;
       }
       body {
-        font-family: 'Poppins', sans-serif;
+        font-family: "Helvetica Neue", Helvetica, sans-serif;
         background: #fff;
         font-size: 1.4rem;
         color: #242a49;

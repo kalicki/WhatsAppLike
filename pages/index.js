@@ -5,9 +5,12 @@ import Header from '../components/header'
 import Loader from '../components/loader'
 
 import Input from '../components/input'
-import GroupList from '../components/group-list'
-import MessageList from '../components/message-list'
-import Addgroup from '../components/add-group'
+import ListGroupsContacts from '../components/group-contact-list'
+import ListMessage from '../components/message-list'
+
+// Adds
+import AddGroup from '../components/add-group'
+import AddContact from '../components/add-contact'
 
 import subscribeGroups from '../lib/subscribe-groups'
 import subscribeMessages from '../lib/subscribe-messages'
@@ -19,8 +22,8 @@ export default class Index extends Component {
     super(props)
     this.state = {
       loading: true,
-      group: 'general',
-      groups: [],
+      item: 'general',
+      items: [],
       messages: [],
       text: '',
       isMenuOpen: false,
@@ -28,25 +31,25 @@ export default class Index extends Component {
   }
 
   componentDidMount() {
-    const { groups } = this.state
-    this.groups = subscribeGroups(
-      groups => this.setState({ groups }),
-      err => console.error('groups subscribe error', err)
+    const { items } = this.state
+    this.items = subscribeContactsGroups(
+      items => this.setState({ items }),
+      err => console.error('items subscribe error', err)
     )
     this.messages = subscribeMessages(
-      groups,
+      items,
       messages => this.setState({ messages, loading: false }),
       err => console.error(err)
     )
   }
 
   componentWillUnmount() {
-    this.groups && this.groups.unsubscribe()
+    this.items && this.items.unsubscribe()
     this.messages && this.messages.unsubscribe()
   }
 
-  handlegroupClick = group => {
-    this.setState({ group })
+  loadChat = item => {
+    this.setState({ item })
 
     this.state.isMenuOpen && this.toggleMobileMenu()
 
@@ -56,7 +59,7 @@ export default class Index extends Component {
     }
 
     this.messages = subscribeMessages(
-      group,
+      item,
       messages => this.setState({ messages, loading: false }),
       err => console.error(err)
     )
@@ -78,21 +81,30 @@ export default class Index extends Component {
     const regex = /^[0-9a-zA-Z_-]+$/
 
     if (!regex.test(name) || name.length < 3) {
-      alert('Invalid group name')
+      alert('Invalid item name')
       return
     }
 
     createGroup(name, () => {
       cb()
-      this.handlegroupClick(name)
+      this.loadChat(name)
     })
   }
 
+  newUser = (name, cb) => {
+
+    newUser(name, () => {
+      cb()
+      this.loadChat(name)
+    })
+
+  }
+
   async sendMessage() {
-    const { group, text } = this.state
+    const { item, text } = this.state
 
     try {
-      await sendMessage(group, text)
+      await sendMessage(item, text)
       this.setState({ text: '' })
     } catch (err) {
       console.log('message not sent', err)
@@ -104,39 +116,38 @@ export default class Index extends Component {
   render() {
     const {
       login,
-      groups,
-      group,
+      items,
+      item,
       messages,
       text,
       loading,
       isMenuOpen,
     } = this.state
 
-    console.log(group)
-
     return (
       <Page
-        heading={`# ${group}`}
+        heading={`# ${item}`}
         onMenuClick={this.toggleMobileMenu}
         isMenuOpen={isMenuOpen}
       >
         <div>
           <aside className={`${isMenuOpen && 'open'}`}>
-            <GroupList
-              groups={groups}
-              activegroup={group}
-              onClick={this.handlegroupClick}
+            <ListGroupsContacts
+              list={items}
+              active={item}
+              onClick={this.loadChat}
             />
-            <Addgroup onSubmit={this.createGroup} />
+            <AddGroup onSubmit={this.createGroup} />
+            <AddContact onSubmit={this.createContact} />
           </aside>
           <main>
-            <MessageList messages={messages} loading={loading} />
+            <ListMessage messages={messages} loading={loading} />
             <Input
-              placeholder="Digite a mensagem..."
+              placeholder="Type a message..."
               onChange={this.handleInputChange}
               onSubmit={this.handleSubmit}
               value={text}
-              buttonSubmit="Enviar"
+              buttonSubmit="Send"
             />
           </main>
         </div>
@@ -174,7 +185,6 @@ export default class Index extends Component {
                 transform: none;
                 flex: 1;
                 max-width: 400px;
-                padding: 0 0 0 130px;
               }
             }
 

@@ -1,10 +1,9 @@
 import React from 'react'
 
-const GroupItem = ({ name, lastMessage, onClick, active }) =>
+const GroupContactItem = ({ name, lastMessage, onClick, active }) =>
   <li>
     <button onClick={onClick} className={active && 'active'}>
       <span>
-        <span className="dash">#</span>
         {name}
       </span>
       {lastMessage.text
@@ -55,4 +54,4 @@ const GroupItem = ({ name, lastMessage, onClick, active }) =>
     </style>
   </li>
 
-export default GroupItem
+export default GroupContactItem
