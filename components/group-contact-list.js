@@ -14,7 +14,7 @@ const ListGroupsContacts = ({ items, active, onClick }) =>
           lastMessage={item.body.lastMessage}
           active={item.id === active}
         />
-      )}
+      }
     </ul>
 
     <style jsx>

@@ -12,7 +12,7 @@ import ListMessage from '../components/message-list'
 import AddGroup from '../components/add-group'
 import AddContact from '../components/add-contact'
 
-import subscribeGroups from '../lib/subscribe-groups'
+import subscribeContactsGroups from '../lib/subscribe-groups'
 import subscribeMessages from '../lib/subscribe-messages'
 import sendMessage from '../lib/send-message'
 import createGroup from '../lib/create-group'
