@@ -4,18 +4,23 @@ import Page from '../components/page'
 import Header from '../components/header'
 import Loader from '../components/loader'
 
+// Login & Register
+import Auth from '../components/auth'
+import {createUser, loginUser} from '../lib/auth'
+
 import Input from '../components/input'
 import ListGroupsContacts from '../components/group-contact-list'
 import ListMessage from '../components/message-list'
 
-// Adds
+// Add Groups
 import AddGroup from '../components/add-group'
+import createGroup from '../lib/create-group'
+
 import AddContact from '../components/add-contact'
 
 import subscribeContactsGroups from '../lib/subscribe-groups'
 import subscribeMessages from '../lib/subscribe-messages'
 import sendMessage from '../lib/send-message'
-import createGroup from '../lib/create-group'
 
 export default class Index extends Component {
   constructor(props) {
@@ -27,6 +32,8 @@ export default class Index extends Component {
       messages: [],
       text: '',
       isMenuOpen: false,
+      isLoggedIn: false,
+      regexName: /^[0-9a-zA-Z_-]+$/
     }
   }
 
@@ -36,11 +43,14 @@ export default class Index extends Component {
       items => this.setState({ items }),
       err => console.error('items subscribe error', err)
     )
+
     this.messages = subscribeMessages(
       items,
       messages => this.setState({ messages, loading: false }),
       err => console.error(err)
     )
+
+    this.isLoggedIn = sessionStorage.getItem('isLoggedIn')
   }
 
   componentWillUnmount() {
@@ -78,9 +88,7 @@ export default class Index extends Component {
   }
 
   createGroup = (name, cb) => {
-    const regex = /^[0-9a-zA-Z_-]+$/
-
-    if (!regex.test(name) || name.length < 3) {
+    if (!this.regexName.test(name) || name.length < 3) {
       alert('Invalid item name')
       return
     }
@@ -91,13 +99,47 @@ export default class Index extends Component {
     })
   }
 
-  newUser = (name, cb) => {
+  // createUser
+  createUser = (registerName, registerPhone, registerPassword, cb) => {
+    if (!this.regexName.test(registerName) || registerName.length < 3) {
+      alert('Invalid name')
+      return
+    }
 
-    newUser(name, () => {
+    if (registerPhone.length < 8) {
+      alert('Invalid phone number (minimum length 8 characters)')
+      return
+    }
+
+    if (registerPassword.length < 6) {
+      alert('Password minimum length 6 characters')
+      return
+    }
+
+    createUser(registerName, registerPhone, registerPassword, () => {
       cb()
-      this.loadChat(name)
     })
 
+  }
+
+  // loginUser
+  loginUser = (loginPhone, loginPassword, cb) => {
+    if (loginPhone.length< 3 || loginPassword.length < 6) {
+      alert('Invalid name or password')
+      return
+    }
+
+    loginUser(loginPhone, loginPassword, (result) => {
+      if (result !== true) {
+        alert('Invalid name or password')
+        return
+      }
+
+      cb()
+
+      sessionStorage.setItem('isLoggedIn', !this.state.isLoggedIn)
+      this.setState({ isLoggedIn: !this.state.isLoggedIn})
+    })
   }
 
   async sendMessage() {
@@ -115,12 +157,12 @@ export default class Index extends Component {
 
   render() {
     const {
-      login,
       items,
       item,
       messages,
       text,
       loading,
+      isLoggedIn,
       isMenuOpen,
     } = this.state
 
@@ -130,6 +172,15 @@ export default class Index extends Component {
         onMenuClick={this.toggleMobileMenu}
         isMenuOpen={isMenuOpen}
       >
+
+      {this.isLoggedIn !== true ?
+        <Auth
+          isLoggedIn={this.isLoggedIn}
+          onSubmitLogin={this.loginUser}
+          onSubmitRegister={this.createUser}
+        />
+      : null }
+
         <div>
           <aside className={`${isMenuOpen && 'open'}`}>
             <ListGroupsContacts

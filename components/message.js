@@ -5,10 +5,10 @@ import formatDate from '../utils/format-date'
 const Message = ({ body }) =>
   <div>
     <div className="header">
-      <span className="sender">{body.senderName}</span>
+      <span className="sender">{body.idEmisor}</span>
       <span className="date">{formatDate(body.sentDate)}</span>
     </div>
-    <span className="text">{body.text}</span>
+    <span className="text">{body.content}</span>
     <style jsx>
       {`
         div {

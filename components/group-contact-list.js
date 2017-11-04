@@ -4,9 +4,8 @@ import GroupContact from './group-contact'
 const ListGroupsContacts = ({ items, active, onClick }) =>
   <div>
     <ul>
-      { console.log(items) }
-
-      {items.map(item =>
+      {console.log(items)
+        /*items.map(item =>
         <GroupContact
           key={item.id}
           onClick={() => onClick(item.id)}
@@ -14,7 +13,7 @@ const ListGroupsContacts = ({ items, active, onClick }) =>
           lastMessage={item.body.lastMessage}
           active={item.id === active}
         />
-      )}
+      )*/}
     </ul>
 
     <style jsx>
